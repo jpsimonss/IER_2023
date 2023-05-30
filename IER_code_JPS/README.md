@@ -71,6 +71,7 @@ To load the graphs, press **Load Single**. Four graphs will appear.
 In the middle column:
 - A graph displaying the eye-openness of both eyes. A red cross indicates when the algorithm indicates it as a blink.
 - A graph indicating what the duration [s] of every blink is. 
+
 In the right column:
 - A boxplot containing the distribution of the intervals [s] between the blinks.
 - A boxplot containing the distribution of the durations of all the blinks.
@@ -82,6 +83,7 @@ Four graphs appear.
 In the middle column:
 - A graph showing the distribution of the blink **intervals** of the selected participant in all the five tests.
 - A graph showing the distribution of the blink **durations** of the selected participant in all the five tests.
+
 In the right column:
 - A bar plot with the average blink rate [blinks/minute] of the selected participant in all the five tests.
 - A bar plot with the average blink duration [s] of the selected participant in all the five tests.
