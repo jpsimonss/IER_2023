@@ -17,7 +17,7 @@ if __name__ == '__main__':
     while True:
         event, values = window.read()
         print(f'Event = {event}\nValues ={values})')
-        if event in("Exit",sg.WIN_CLOSED):
+        if event in ("Exit",sg.WIN_CLOSED):
             break
 
         # Load-button tab 1
