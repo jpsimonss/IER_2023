@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 '''
-Class made for the User Interface
+User Interface
 Made with PySimpleGUI
 Author: JP Simons (4368185)'''
 
