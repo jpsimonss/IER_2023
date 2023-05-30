@@ -9,8 +9,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime as dt
+import os
 
-EXECUTE_HERE = False
 # Keys: frame;Timestamp;openness_L;openness_R;pupil_diameter_L(mm);pupil_diameter_R(mm);
 # 'Control' 'Noise' 'NPC' '4_Combined' 'Second_Task'
 ############################################
@@ -127,8 +127,8 @@ class SingleBlinkRate(BlinkRate):
         super().__init__(participant, th_closed) # super(SingleBlinkRate, self) == super()
         self.participant = participant
         self.condition = condition
-        # self.th_closed = th_closed
-        self.csv_loc = f'./EyeTracking-data/P{self.participant}/Eyerecording_Test_{self.condition}.csv'
+        # self.csv_loc = f'./EyeTracking-data/P{self.participant}/Eyerecording_Test_{self.condition}.csv'
+        self.csv_loc = os.path.join(f'IER_code_JPS/EyeTracking-data/P{self.participant}/Eyerecording_Test_{self.condition}.csv')
         self.dataframe = None
 
         print(self)
@@ -162,7 +162,7 @@ class SingleBlinkRate(BlinkRate):
         plt.axhline(y=-self.th_closed, color = 'tab:gray', linestyle = '--')
         plt.legend(['Openness Left', 'Openness Right', 'Blink count', 'Threshold'], loc='upper right')
         if save:
-            self.loc_graph_eye_openness = './data_processed/graph_eye_openness.png'
+            self.loc_graph_eye_openness = 'IER_code_JPS/data_processed/graph_eye_openness.png'
             plt.savefig(self.loc_graph_eye_openness) 
         if show:
             plt.show()
@@ -179,7 +179,7 @@ class SingleBlinkRate(BlinkRate):
         plt.text(round((self.total_duration + 5), 10)-5,max(self.blink_lengths), text, 
                  verticalalignment = 'top', horizontalalignment = 'right' ,bbox = props)
         if save:
-            self.loc_graph_blink_duration = './data_processed/graph_blink_duration.png' 
+            self.loc_graph_blink_duration = 'IER_code_JPS/data_processed/graph_blink_duration.png' 
             plt.savefig(self.loc_graph_blink_duration)
         if show:
             plt.show()
@@ -201,7 +201,7 @@ class SingleBlinkRate(BlinkRate):
         plt.xticks([1], labels=[''])
         plt.tight_layout()
         if save:
-            self.loc_boxplot_blinks_interval = './data_processed/boxplot_blinks_interval.png' 
+            self.loc_boxplot_blinks_interval = 'IER_code_JPS/data_processed/boxplot_blinks_interval.png' 
             plt.savefig(self.loc_boxplot_blinks_interval)
         if show:
             plt.show()
@@ -223,18 +223,18 @@ class SingleBlinkRate(BlinkRate):
         plt.xticks([1], labels=[''])
         plt.tight_layout()
         if save:
-            self.loc_boxplot_blink_durations = './data_processed/boxplot_blink_durations.png' 
+            self.loc_boxplot_blink_durations = 'IER_code_JPS/data_processed/boxplot_blink_durations.png' 
             plt.savefig(self.loc_boxplot_blink_durations)
         if show:
             plt.show()
             plt.close()        
 
-    def process_all(self):
+    def process_all(self, show=False):
         self.process_single_dataframe(self.csv_loc)
         self.determine_blink()
         try:
             a = max(self.blink_lengths)
-            self.plots_test(show=False,save=True)
+            self.plots_test(show=show)
         except ValueError:
             self.no_values = True
             print('NO Values, higher your threshold!')
@@ -253,7 +253,7 @@ class AllTestsBlinkRate(BlinkRate):
 
     def process_data(self):
         for condition in self.condition_names:
-            csv_loc = f'./EyeTracking-data/P{self.participant}/Eyerecording_Test_{condition}.csv'
+            csv_loc = f'IER_code_JPS/EyeTracking-data/P{self.participant}/Eyerecording_Test_{condition}.csv'
             self.process_single_dataframe(csv_loc)
             self.determine_blink()
 
@@ -277,11 +277,11 @@ class AllTestsBlinkRate(BlinkRate):
         plt.ylabel('Blinks / minute [-]')
         plt.title(f'Avg blink rate\nP{self.participant}')
         plt.tight_layout()
+        if save:
+            self.loc_bar_avg_blinkrate = 'IER_code_JPS/data_processed/bar_avg_blinkrate.png'
+            plt.savefig(self.loc_bar_avg_blinkrate)
         if show:
             plt.show()
-        if save:
-            self.loc_bar_avg_blinkrate = './data_processed/bar_avg_blinkrate.png'
-            plt.savefig(self.loc_bar_avg_blinkrate)
             
 
         # Plot avg blink durations per participant
@@ -290,11 +290,11 @@ class AllTestsBlinkRate(BlinkRate):
         plt.title(f'Avg blink durations\nP{self.participant}')
         plt.ylabel('Avg blink duration [s]')
         plt.tight_layout()
+        if save:
+            self.loc_bar_avg_blinkduration = 'IER_code_JPS/data_processed/bar_avg_blinkduration.png' 
+            plt.savefig(self.loc_bar_avg_blinkduration)
         if show:
             plt.show()
-        if save:
-            self.loc_bar_avg_blinkduration = './data_processed/bar_avg_blinkduration.png' 
-            plt.savefig(self.loc_bar_avg_blinkduration)
         
         # Boxplots blink_intervals
         plt.figure(figsize=self.bigfigsize)
@@ -303,11 +303,11 @@ class AllTestsBlinkRate(BlinkRate):
         plt.title(f'Blink interval lengths, P{self.participant}, for all conditions')
         plt.ylabel('Blink interval lengths [s]')
         plt.tight_layout()
+        if save:
+            self.loc_box_blink_intervals = 'IER_code_JPS/data_processed/box_blink_intervals.png' 
+            plt.savefig(self.loc_box_blink_intervals)
         if show:
             plt.show()
-        if save:
-            self.loc_box_blink_intervals = './data_processed/box_blink_intervals.png' 
-            plt.savefig(self.loc_box_blink_intervals)
         
         # Boxplots blink_intervals
         plt.figure(figsize=self.bigfigsize)
@@ -316,31 +316,33 @@ class AllTestsBlinkRate(BlinkRate):
         plt.title(f'Blink durations, P{self.participant}, for all conditions')
         plt.ylabel('Blink durations [s]')
         plt.tight_layout()
+        if save:
+            self.loc_box_blink_durations = 'IER_code_JPS/data_processed/box_blink_durations.png' 
+            plt.savefig(self.loc_box_blink_durations)
         if show:
             plt.show()
-        if save:
-            self.loc_box_blink_durations = './data_processed/box_blink_durations.png' 
-            plt.savefig(self.loc_box_blink_durations)
             
     
-    def process_all(self):
+    def process_all(self, show=False):
         self.process_data()
         try:
             for blink_lengths in self.blink_intervals_all_conditions:
                 a = max(blink_lengths)
-            self.plots_test()
+            self.plots_test(show)
         except ValueError:
             self.no_values = True
             print('NO Values, higher your threshold!')
 
 
 #______________________EXECUTE_HERE_______________________________#
-if EXECUTE_HERE:
-    # assessment_1 = SingleBlinkRate(14,'Second_Task')
-    # assessment_1.process_all(0.5, show=True)
-    # ass2 = AllTestsBlinkRate(14, 0.5)
-    # ass2.process_all(show=False)
-    pass
+if __name__ == '__main__':
+        print('Executing here')
+        assessment_1 = SingleBlinkRate(14,'Second_Task', 0.5)
+        assessment_1.process_all(show=True)
+        ass2 = AllTestsBlinkRate(14, 0.5)
+        ass2.process_all(show=True)
+        
+        
 
 
 
