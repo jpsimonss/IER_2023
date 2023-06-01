@@ -18,7 +18,7 @@ import os
 class BlinkRate:
     def __init__(self, participant, th_closed):
         self.participant = participant
-        self.condition_names = ['Control','Noise','NPC','4_Combined','Second_Task']
+        self.condition_names = ['Control','Noise','NPC', 'Second_Task','4_Combined']
         self.bigfigsize = (10,4)
         self.smallfigsize = (3.3,4)
         self.th_closed = th_closed
@@ -267,8 +267,8 @@ class AllTestsBlinkRate(BlinkRate):
         
         # Plot parameters
         colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple']
-        names_small = ['Ctrl','Noise','NPC','Comb','2nd']
-        names = ['Control','Noise','NPC','Combined','Second Task']
+        names_small = ['Ctrl','Noise','NPC','2nd', 'Comb']
+        names = ['Control','Noise','NPC','Second Task', 'Combined']
 
         # Plot avg blink interval per participant
         plt.figure(figsize=self.smallfigsize)
@@ -337,7 +337,7 @@ class AllTestsBlinkRate(BlinkRate):
 #______________________EXECUTE_HERE_______________________________#
 if __name__ == '__main__':
         print('Executing here')
-        assessment_1 = SingleBlinkRate(14,'Second_Task', 0.5)
+        assessment_1 = SingleBlinkRate(14,'NPC', 0.5)
         assessment_1.process_all(show=True)
         ass2 = AllTestsBlinkRate(14, 0.5)
         ass2.process_all(show=True)
