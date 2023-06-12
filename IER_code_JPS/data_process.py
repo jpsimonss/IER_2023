@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 '''
 Data analysis script for Introduction to Engineering Research
 Project: Effects of Different VEs on Cognitive Load
@@ -9,7 +11,11 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime as dt
-import os
+import os, sys
+
+# Fix paths
+DIR = os.getcwd()
+sys.path.append(DIR)
 
 # Keys: frame;Timestamp;openness_L;openness_R;pupil_diameter_L(mm);pupil_diameter_R(mm);
 # 'Control' 'Noise' 'NPC' '4_Combined' 'Second_Task'
@@ -128,7 +134,7 @@ class SingleBlinkRate(BlinkRate):
         self.participant = participant
         self.condition = condition
         # self.csv_loc = f'./EyeTracking-data/P{self.participant}/Eyerecording_Test_{self.condition}.csv'
-        self.csv_loc = os.path.join(f'IER_code_JPS/EyeTracking-data/P{self.participant}/Eyerecording_Test_{self.condition}.csv')
+        self.csv_loc = os.path.join(f'{DIR}/IER_code_JPS/EyeTracking-data/P{self.participant}/Eyerecording_Test_{self.condition}.csv')
         self.dataframe = None
 
         print(self)
@@ -162,7 +168,7 @@ class SingleBlinkRate(BlinkRate):
         plt.axhline(y=-self.th_closed, color = 'tab:gray', linestyle = '--')
         plt.legend(['Openness Left', 'Openness Right', 'Blink count', 'Threshold'], loc='upper right')
         if save:
-            self.loc_graph_eye_openness = 'IER_code_JPS/data_processed/graph_eye_openness.png'
+            self.loc_graph_eye_openness = f'{DIR}/IER_code_JPS/data_processed/graph_eye_openness.png'
             plt.savefig(self.loc_graph_eye_openness) 
         if show:
             plt.show()
@@ -179,7 +185,7 @@ class SingleBlinkRate(BlinkRate):
         plt.text(round((self.total_duration + 5), 10)-5,max(self.blink_lengths), text, 
                  verticalalignment = 'top', horizontalalignment = 'right' ,bbox = props)
         if save:
-            self.loc_graph_blink_duration = 'IER_code_JPS/data_processed/graph_blink_duration.png' 
+            self.loc_graph_blink_duration = f'{DIR}/IER_code_JPS/data_processed/graph_blink_duration.png' 
             plt.savefig(self.loc_graph_blink_duration)
         if show:
             plt.show()
@@ -201,7 +207,7 @@ class SingleBlinkRate(BlinkRate):
         plt.xticks([1], labels=[''])
         plt.tight_layout()
         if save:
-            self.loc_boxplot_blinks_interval = 'IER_code_JPS/data_processed/boxplot_blinks_interval.png' 
+            self.loc_boxplot_blinks_interval = f'{DIR}/IER_code_JPS/data_processed/boxplot_blinks_interval.png' 
             plt.savefig(self.loc_boxplot_blinks_interval)
         if show:
             plt.show()
@@ -223,7 +229,7 @@ class SingleBlinkRate(BlinkRate):
         plt.xticks([1], labels=[''])
         plt.tight_layout()
         if save:
-            self.loc_boxplot_blink_durations = 'IER_code_JPS/data_processed/boxplot_blink_durations.png' 
+            self.loc_boxplot_blink_durations = f'{DIR}/IER_code_JPS/data_processed/boxplot_blink_durations.png' 
             plt.savefig(self.loc_boxplot_blink_durations)
         if show:
             plt.show()
@@ -247,13 +253,14 @@ class AllTestsBlinkRate(BlinkRate):
         self.blink_durations_all_conditions = []
         self.avg_blink_rate_all_conditions = []
         self.avg_blink_duration_all_conditions = []
+        print(self)
 
     def __repr__(self):
         return f'Combined BRA -> Object: P{self.participant}'
 
     def process_data(self):
         for condition in self.condition_names:
-            csv_loc = f'IER_code_JPS/EyeTracking-data/P{self.participant}/Eyerecording_Test_{condition}.csv'
+            csv_loc = f'{DIR}/IER_code_JPS/EyeTracking-data/P{self.participant}/Eyerecording_Test_{condition}.csv'
             self.process_single_dataframe(csv_loc)
             self.determine_blink()
 
@@ -278,7 +285,7 @@ class AllTestsBlinkRate(BlinkRate):
         plt.title(f'Avg blink rate\nP{self.participant}')
         plt.tight_layout()
         if save:
-            self.loc_bar_avg_blinkrate = 'IER_code_JPS/data_processed/bar_avg_blinkrate.png'
+            self.loc_bar_avg_blinkrate = f'{DIR}/IER_code_JPS/data_processed/bar_avg_blinkrate.png'
             plt.savefig(self.loc_bar_avg_blinkrate)
         if show:
             plt.show()
@@ -291,7 +298,7 @@ class AllTestsBlinkRate(BlinkRate):
         plt.ylabel('Avg blink duration [s]')
         plt.tight_layout()
         if save:
-            self.loc_bar_avg_blinkduration = 'IER_code_JPS/data_processed/bar_avg_blinkduration.png' 
+            self.loc_bar_avg_blinkduration = f'{DIR}/IER_code_JPS/data_processed/bar_avg_blinkduration.png' 
             plt.savefig(self.loc_bar_avg_blinkduration)
         if show:
             plt.show()
@@ -304,7 +311,7 @@ class AllTestsBlinkRate(BlinkRate):
         plt.ylabel('Blink interval lengths [s]')
         plt.tight_layout()
         if save:
-            self.loc_box_blink_intervals = 'IER_code_JPS/data_processed/box_blink_intervals.png' 
+            self.loc_box_blink_intervals = f'{DIR}/IER_code_JPS/data_processed/box_blink_intervals.png' 
             plt.savefig(self.loc_box_blink_intervals)
         if show:
             plt.show()
@@ -317,7 +324,7 @@ class AllTestsBlinkRate(BlinkRate):
         plt.ylabel('Blink durations [s]')
         plt.tight_layout()
         if save:
-            self.loc_box_blink_durations = 'IER_code_JPS/data_processed/box_blink_durations.png' 
+            self.loc_box_blink_durations = f'{DIR}/IER_code_JPS/data_processed/box_blink_durations.png' 
             plt.savefig(self.loc_box_blink_durations)
         if show:
             plt.show()
